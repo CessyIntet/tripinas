@@ -7,7 +7,8 @@
     "start:frontend": "npm --workspace frontend start",
     "start:backend": "npm --workspace backend start",
     "test": "npx playwright test",
-    "login-test": "npx playwright test tests/features/login.spec.ts"
+    "login-test": "npx playwright test tests/features/login.spec.ts",
+    "registration-test": "npx playwright test tests/features/registration.spec.ts"
   },
   "repository": {
     "type": "git",
@@ -33,7 +34,7 @@
     "chrome-launcher": "^1.2.0",
     "dotenv": "^16.6.1",
     "js-yaml": "^4.1.0",
-    "lighthouse": "^12.7.0",
+    "lighthouse": "^12.8.2",
     "playwright-html": "1.2.5",
     "pw-api-plugin": "^2.0.2"
   },
