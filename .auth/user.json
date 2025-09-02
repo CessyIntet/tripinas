@@ -1,0 +1,29 @@
+{
+  "cookies": [
+    {
+      "name": "session-username",
+      "value": "regietest21",
+      "domain": "http://localhost:5173/sign-in",
+      "path": "/",
+      "expires": 1753501840,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "http://localhost:5173/sign-in",
+      "localStorage": [
+        {
+          "name": "backtrace-guid",
+          "value": "9826e9e4-75ed-41c0-b6f8-469cd0ae7737"
+        },
+        {
+          "name": "backtrace-last-active",
+          "value": "1753501238201"
+        }
+      ]
+    }
+  ]
+}
