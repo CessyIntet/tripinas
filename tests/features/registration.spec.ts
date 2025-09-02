@@ -1,18 +1,20 @@
+//Data Driven Test for Tripinas
+
 import { test, expect } from '@playwright/test';
 
-// test('Verify that user is able to register with valid data', async ({ page }) => {
-//   await page.goto('http://localhost:5173/sign-in');
-//   await page.getByRole('link', { name: 'Sign up' }).click();
-//   await page.locator('[id="firstName-field"]').fill('newuser3')
-//   await page.locator('[id="lastName-field"]').fill('user')
-//   await page.locator('[id="username-field"]').fill('newuser31')
-//   await page.locator('[id="emailAddress-field"]').fill('newuser3@example.com')
-//   await page.locator('[id="password-field"]').fill('StrongPass!124')
-//   await page.getByRole('button', { name: 'Continue' }).click();
+test('Verify that user is able to register with valid data', async ({ page }) => {
+  await page.goto('http://localhost:5173/sign-in');
+  await page.getByRole('link', { name: 'Sign up' }).click();
+  await page.locator('[id="firstName-field"]').fill('newuser3')
+  await page.locator('[id="lastName-field"]').fill('user')
+  await page.locator('[id="username-field"]').fill('newuser31')
+  await page.locator('[id="emailAddress-field"]').fill('newuser3@example.com')
+  await page.locator('[id="password-field"]').fill('StrongPass!124')
+  await page.getByRole('button', { name: 'Continue' }).click();
     
-//   // Assert on a dashboard element
-//   await expect(page.getByRole('heading', { name: 'Welcome to your admin' })).toBeVisible();
-// });
+  // Assert on a dashboard element
+  await expect(page.getByRole('heading', { name: 'Welcome to your admin' })).toBeVisible();
+});
 
 
 //Negative testing
