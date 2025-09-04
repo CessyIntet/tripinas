@@ -12,7 +12,8 @@
     "auth-setup": "npx playwright test auth.setup.ts --ui --project setup",
     "e2e-auth-ui": "npx playwright test tests/features/e2e-auth.spec.ts --project e2e --ui",
     "e2e-auth": "npx playwright test tests/features/e2e-auth.spec.ts --project chromium --trace on",
-    "e2e-unauth": "npx playwright test tests/features/e2e-unauth.spec.ts --project chromium"
+    "e2e-unauth": "npx playwright test tests/features/e2e-unauth.spec.ts --project chromium",
+    "user-api-test": "npx playwright test user.api.spec.ts --project api"
 
   },
   "repository": {

@@ -18,8 +18,15 @@ const XSS_LOGIN_ATTEMPT_SCREENSHOT = 'xss-login-attempt.png';
     test.beforeEach(async ({ loginPage }) => {
       await loginPage.navigateTo();
       });
+
+      
     
       test(`should login as ${user.username} and verify profile - POM`, async ({ loginPage }, testInfo) => {
+        testInfo.annotations.push({
+          type: 'flaky',
+          description: 'Tests failing intermittently',
+          });
+
         await test.step('Login with valid credentials', async () => {
           await loginPage.login(process.env.TRIPINAS_USERNAME!, process.env.TRIPINAS_PASSWORD!);
         });
@@ -38,7 +45,12 @@ const XSS_LOGIN_ATTEMPT_SCREENSHOT = 'xss-login-attempt.png';
       });
 
       test(`${user.username} can click profile Popover and view correct details`, async ({ loginPage }, testInfo) => {
-          await test.step('Login with valid credentials', async () => {
+        testInfo.annotations.push({
+          type: 'flaky',
+          description: 'Tests failing intermittently',
+          });
+        
+        await test.step('Login with valid credentials', async () => {
             await loginPage.login(process.env.TRIPINAS_USERNAME!, process.env.TRIPINAS_PASSWORD!);
           });
 
@@ -56,6 +68,10 @@ const XSS_LOGIN_ATTEMPT_SCREENSHOT = 'xss-login-attempt.png';
       });
 
       test(`${user.username} can logout and return to login page`, async ({ loginPage }, testInfo) => {
+        testInfo.annotations.push({
+          type: 'flaky',
+          description: 'Tests failing intermittently',
+          });
 
         await test.step('Login with valid credentials', async () => {
           await loginPage.login(process.env.TRIPINAS_USERNAME!, process.env.TRIPINAS_PASSWORD!);
@@ -167,7 +183,12 @@ const XSS_LOGIN_ATTEMPT_SCREENSHOT = 'xss-login-attempt.png';
     });
   });
 
+  
+
     // ---------------- Security Tests ----------------
+
+    // spotted a security gap HERE (input not sanitized, no error message)
+    // to raise this Sir Reg
 test.describe('Login - Security Tests', { tag: [ '@Security', "@Sprint-1"] }, () => {
   users.forEach((user) => {
     test.beforeEach(async ({ loginPage }) => {
@@ -175,6 +196,11 @@ test.describe('Login - Security Tests', { tag: [ '@Security', "@Sprint-1"] }, ()
       });
 
       test('Security test: Should not allow XSS attack in login form', async ({ loginPage }, testInfo) => {
+        testInfo.annotations.push({
+          type: 'security',
+          description: 'Testing for XSS vulnerability in login form (input not sanitized, no error message)',
+          });
+        
         const payload = "<script>alert('XSS')</script>";
 
         await test.step('Navigate to login page', async () => {
