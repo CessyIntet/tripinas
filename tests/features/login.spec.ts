@@ -36,11 +36,7 @@ const XSS_LOGIN_ATTEMPT_SCREENSHOT = 'xss-login-attempt.png';
         });
 
         await test.step('Attach screenshot of successful login', async () => {
-          await attachScreenshot(
-            loginPage.page,
-            testInfo,
-            LOGIN_SUCCESS_SCREENSHOT,
-          );
+          await attachScreenshot(loginPage.page,testInfo,LOGIN_SUCCESS_SCREENSHOT,);
         });
       });
 

@@ -5,5 +5,12 @@
     "username": "ramiPedra",
     "email": "pedra@example.com",
     "password": "ped!785753"
+  },
+  {
+    "firstName": "John",
+    "lastName": "Doe",
+    "username": "johnDoe",
+    "email": "john@example.com",
+    "password": "john123"
   }
 ]

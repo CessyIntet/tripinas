@@ -11,7 +11,7 @@
 //         const { response, newUser } = await registerRandomUser(request, apiBaseUrl);
 //         console.info("Status Code:", response.status());
 //         console.info("Response Body:", await response.json());
-//         console.info("New User Email:", newUser.name);
+//         console.info("New User Email:", newUser.randomEmail);
 //         expect(response.status()).toBe(201);
 //         expect(response.ok()).toBeTruthy();
 //         expect(response.body()).toBeDefined();
