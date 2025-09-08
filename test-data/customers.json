@@ -1,62 +1,9 @@
 [
   {
-    "fullname": "Juan Dela Cruz",
-    "username": "juandelacruz01",
-    "email": "juan01@example.com",
-    "password": "Test@1234"
-  },
-  {
-    "fullname": "Maria Santos",
-    "username": "mariasantos02",
-    "email": "maria02@example.com",
-    "password": "Test@1234"
-  },
-  {
-    "fullname": "Pedro Ramirez",
-    "username": "pedroramirez03",
-    "email": "pedro03@example.com",
-    "password": "Test@1234"
-  },
-  {
-    "fullname": "Ana Lopez",
-    "username": "analopez04",
-    "email": "ana04@example.com",
-    "password": "Test@1234"
-  },
-  {
-    "fullname": "Carlos Reyes",
-    "username": "carlosreyes05",
-    "email": "carlos05@example.com",
-    "password": "Test@1234"
-  },
-  {
-    "fullname": "Sofia Mendoza",
-    "username": "sofiamendoza06",
-    "email": "sofia06@example.com",
-    "password": "Test@1234"
-  },
-  {
-    "fullname": "Miguel Torres",
-    "username": "migueltorres07",
-    "email": "miguel07@example.com",
-    "password": "Test@1234"
-  },
-  {
-    "fullname": "Isabella Cruz",
-    "username": "isabellacruz08",
-    "email": "isabella08@example.com",
-    "password": "Test@1234"
-  },
-  {
-    "fullname": "Diego Bautista",
-    "username": "diegobautista09",
-    "email": "diego09@example.com",
-    "password": "Test@1234"
-  },
-  {
-    "fullname": "Elena Ramos",
-    "username": "elenaramos10",
-    "email": "elena10@example.com",
-    "password": "Test@1234"
+    "firstName": "Pedra",
+    "lastName": "rami",
+    "username": "ramiPedra",
+    "email": "pedra@example.com",
+    "password": "ped!785753"
   }
 ]
