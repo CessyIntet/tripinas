@@ -1,6 +1,6 @@
 //Tripinas Test Suite Activity
 
-import { test, expect } from '../../shared/base';
+import { test, expect } from '../../shared/base.ts';
 import { attachScreenshot } from '../../shared/helpers.ts';
 import users from '../../test-data/users.json';
 
@@ -40,8 +40,6 @@ const XSS_LOGIN_ATTEMPT_SCREENSHOT = 'xss-login-attempt.png';
         });
       });
 
-      // move to dashboard.spec.ts later
-
       test(`${user.username} can click profile Popover and view correct details`, async ({ loginPage }, testInfo) => {
         testInfo.annotations.push({
           type: 'flaky',
@@ -64,8 +62,6 @@ const XSS_LOGIN_ATTEMPT_SCREENSHOT = 'xss-login-attempt.png';
             await attachScreenshot(loginPage.page, testInfo, LOGIN_SUCCESS_SCREENSHOT);
           });
       });
-
-      // move to dashboard.spec.ts later
 
       test(`${user.username} can logout and return to login page`, async ({ loginPage }, testInfo) => {
         testInfo.annotations.push({

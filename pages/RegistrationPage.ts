@@ -1,27 +1,26 @@
-import { Page, expect } from '@playwright/test';
+import { expect, Locator, Page } from '@playwright/test';
 
 export class RegistrationPage {
 
   // Locators
-public readonly signInUrl = 'http://localhost:5173/sign-in';
-  public readonly signUpLink;
-  public readonly firstNameField;
-  public readonly lastNameField;
-  public readonly usernameField;
-  public readonly emailField;
-  public readonly passwordField;
-  public readonly continueButton;
+  public readonly signUpLink: Locator;
+  public readonly firstNameField: Locator;
+  public readonly lastNameField: Locator;  
+  public readonly usernameField: Locator;
+  public readonly emailField: Locator;
+  public readonly passwordField: Locator;
+  public readonly continueButton: Locator;
 
-  public readonly headingDashboard;
-  public readonly userFullname;
-  public readonly userUsername;
-  public readonly userEmail;
-  public readonly welcomeHeading;
-  public readonly adminHeading;
-  public readonly dashboardLink;
-  public readonly userMenuButton;
-  public readonly signOutButton;
-  public readonly errorPassword;
+  public readonly headingDashboard: Locator;
+  public readonly userFullname: Locator;
+  public readonly userUsername: Locator;
+  public readonly userEmail: Locator;
+  public readonly welcomeHeading: Locator; 
+  public readonly adminHeading: Locator;  
+  public readonly dashboardLink: Locator;
+  public readonly userMenuButton: Locator;
+  public readonly signOutButton: Locator;
+  public readonly errorPassword: Locator;
 
   constructor(public readonly page: Page) {
 
@@ -47,9 +46,11 @@ public readonly signInUrl = 'http://localhost:5173/sign-in';
     this.signOutButton = page.getByRole('menuitem', { name: 'Sign out' });
   }
 
-  async navigateTo() {
-    await this.page.goto(this.signInUrl); await this.signUpLink.click();
-  }
+
+  async navigateTo(): Promise<void> {
+        await this.page.goto('http://localhost:5173/sign-in');
+        await this.page.waitForLoadState('networkidle');
+    }
 
   async fillForm(customer: any) {
     await this.firstNameField.fill(customer.firstName);

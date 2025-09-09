@@ -1,12 +1,14 @@
 import { test as base, request } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 import { RegistrationPage } from '../pages/RegistrationPage';
+import { DashboardPage } from '../pages/DashboardPage';
 // import { APIModel } from '../pages/api.model';
 // import { FakeStoreAPI } from '../pages/api-fake-store.model';
 
 type MyFixtures = {
   loginPage: LoginPage;
   registrationPage: RegistrationPage;
+  dashboardPage: DashboardPage;
 //   apiJsonPlaceholder: APIModel;
 //   fakeStoreAPI: FakeStoreAPI;
 };
@@ -17,6 +19,9 @@ export const test = base.extend<MyFixtures>({
   },
   registrationPage: async ({ page }, use) => {
     await use(new RegistrationPage(page));
+  },
+  dashboardPage: async ({ page }, use) => {
+    await use(new DashboardPage(page));
   },
 //   apiJsonPlaceholder: async ({}, use) => {
 //     const requestContext = await request.newContext({

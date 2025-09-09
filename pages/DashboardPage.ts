@@ -1,11 +1,11 @@
 import { expect, Locator, Page } from '@playwright/test';
 
 /**
- * POM for Tripinas Login Page.
- * Encapsulates selectors and actions for login-related tests.
+ * POM for Tripinas Dashboard Page.
+ * Encapsulates selectors and actions for dashboard-related tests.
  */
-export class LoginPage {
-    // Locators for login page elements
+export class DashboardPage {
+    // Locators for dashboard page elements
     public readonly identifierInput: Locator;    // Username/email input field
     public readonly passwordInput: Locator;      // Password input field
     public readonly continueButton: Locator;     // Continue/Login button
@@ -170,14 +170,6 @@ export class LoginPage {
     async verifySignUpLinkIsVisible(): Promise<void> {
         await expect(this.signInStartActionLink).toBeVisible();
         await expect(this.signInStartActionLink).toHaveAttribute('href', 'http://localhost:5173/sign-up');
-    }
-
-    async LoginValidUser(identifier: string, passwordInput: string): Promise<void> {
-        await this.page.goto('http://localhost:5173/sign-in');
-        await this.page.waitForLoadState('networkidle');
-        await this.identifierInput.fill(identifier);
-        await this.passwordInput.fill(passwordInput);
-        await this.continueButton.click();
     }
 
 }
