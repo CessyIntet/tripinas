@@ -181,7 +181,7 @@ test.describe("Registration Test Suites",{ tag: ["@Data-Driven", "@Regression", 
 
                 //  Assert: user should not be logged in / redirected
                 await test.step('User should still be on registration page', async () => {
-                    await expect(registrationPage.firstNameField).toBeVisible();
+                    await registrationPage.verifyFirstNameFieldIsVisible();
                 });
 
                 //  Assert: input still contains the payload (echoed raw, which is bad but not executed)

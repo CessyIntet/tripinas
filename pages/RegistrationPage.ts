@@ -100,4 +100,20 @@ public readonly signInUrl = 'http://localhost:5173/sign-in';
     await expect(this.errorPassword).toBeVisible();
   }
 
+  async verifyFirstNameFieldIsVisible(): Promise<void> {
+    await expect(this.firstNameField).toBeVisible();
+  }
+  async verifyLastNameFieldIsVisible(): Promise<void> {
+    await expect(this.lastNameField).toBeVisible();
+  }
+  async verifyUsernameFieldIsVisible(): Promise<void> {
+    await expect(this.usernameField).toBeVisible();
+  }
+  async verifyEmailFieldIsVisible(): Promise<void> {
+    await expect(this.emailField).toBeVisible();
+  }
+  async verifyPasswordFieldIsVisible(): Promise<void> {
+    await expect(this.passwordField).toBeVisible();
+  }       
+
 }
