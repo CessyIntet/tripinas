@@ -48,19 +48,38 @@ test.describe("Registration Test Suites",{ tag: ["@Regression", "@Sprint-1", "@H
     });
          
 
-    test.only('Verify that user is unable to register with invalid data', async ({ page }, testInfo) => {
-        // Select the first customer
+    test('Verify that user is unable to register with invalid data', async ({ page }, testInfo) => {
+        // Select the 2nd customer (with invalid password)
     const customer = users[1];
 
-        await page.locator('[id="firstName-field"]').fill(customer.firstName);
-        await page.locator('[id="lastName-field"]').fill(customer.lastName);
-        await page.locator('[id="username-field"]').fill(customer.username);
-        await page.locator('[id="emailAddress-field"]').fill(customer.email);
-        await page.locator('[id="password-field"]').fill(customer.password); // Invalid password
-        await page.getByRole('button', { name: 'Continue' }).click();
+        await test.step('Input first name', async () => {
+            await page.locator('[id="firstName-field"]').fill(customer.firstName);
+        });
+
+        await test.step('Input last name', async () => {
+            await page.locator('[id="lastName-field"]').fill(customer.lastName);
+        });
+
+        await test.step('Input username', async () => {
+            await page.locator('[id="username-field"]').fill(customer.username);
+        });
+
+        await test.step('Input email address', async () => {
+            await page.locator('[id="emailAddress-field"]').fill(customer.email);
+        });
+
+        await test.step('Input invalid password', async () => {
+            await page.locator('[id="password-field"]').fill(customer.password); // Invalid password
+        });
+
+        await test.step('Click continue button', async () => {
+            await page.getByRole('button', { name: 'Continue' }).click();
+        });
 
         // Get validation message
-        await expect(page.locator('#error-password')).toBeVisible();
+        await test.step('Check for error message', async () => {
+            await expect(page.locator('#error-password')).toBeVisible();
+        });
 
         await test.step('Attach screenshot of failed registration', async () => {
             await attachScreenshot(page, testInfo, REGISTRATION_FAILURE_SCREENSHOT);
@@ -69,34 +88,78 @@ test.describe("Registration Test Suites",{ tag: ["@Regression", "@Sprint-1", "@H
 
 
 
-    //         //Negative testing (empty field)
-    //         test.only('Verify that user is unable to register with empty fields', async ({ page }) => {
-    //         await page.goto('http://localhost:5173/sign-in');
-    //         await page.getByRole('link', { name: 'Sign up' }).click();
-    //         await page.getByRole('button', { name: 'Continue' }).click();
-                
-    //         // Get validation message
-    //         const validationMsg = await page.locator('[id="emailAddress-field"]').evaluate(
-    //             (el: HTMLInputElement) => el.validationMessage
-    //         );
+            //Negative testing (empty field)
+    test.only('Verify that user is unable to register with empty fields', async ({ page }, testInfo) => {
+        
+        
+        await test.step('Click continue button with the fields empty', async () => {
+            await page.getByRole('button', { name: 'Continue' }).click();
+        });
 
-    //         // Assert a validation message exists
-    //         expect(validationMsg).not.toBe('');
-    //         });
+        // Get validation message
+        await test.step('Check for error message', async () => {
+            const validationMsg = await page.locator('[id="username-field"]').evaluate(
+                (el: HTMLInputElement) => el.validationMessage
+            );
+            expect(validationMsg).toBe('Please fill out this field.');
+        });
 
-    //         test('Boundary test: Min Password Length', async ({ page }) => {
-    //         await page.goto('http://localhost:5173/sign-in');
-    //         await page.getByRole('link', { name: 'Sign up' }).click();
-    //         await page.locator('[id="firstName-field"]').fill('newuser4')
-    //         await page.locator('[id="lastName-field"]').fill('user45')
-    //         await page.locator('[id="username-field"]').fill('newuser41')
-    //         await page.locator('[id="emailAddress-field"]').fill('newuser41@example.com')
-    //         await page.locator('[id="password-field"]').fill('new')
-    //         await page.getByRole('button', { name: 'Continue' }).click();
+        await test.step('Attach screenshot of failed registration', async () => {
+            await attachScreenshot(page, testInfo, REGISTRATION_FAILURE_SCREENSHOT);
+        });
 
-    //         await expect(page.locator('#error-password')).toBeVisible();
+    });
 
-    //         });
+        test.only('Boundary test: Min Password Length', async ({ page }, testInfo) => {
+        // Select the 3rd customer (with 3-character password)
+            const customer = users[2];
+
+            await test.step('Input first name', async () => {
+                await page.locator('[id="firstName-field"]').fill(customer.firstName);
+            });
+
+            await test.step('Input last name', async () => {
+                await page.locator('[id="lastName-field"]').fill(customer.lastName);
+            });
+
+            await test.step('Input username', async () => {
+                await page.locator('[id="username-field"]').fill(customer.username);
+            });
+
+            await test.step('Input email address', async () => {
+                await page.locator('[id="emailAddress-field"]').fill(customer.email);
+            });
+
+            await test.step('Input 3-character password', async () => {
+                await page.locator('[id="password-field"]').fill(customer.password); // Invalid due to 3 characters only
+            });
+
+            await test.step('Click continue button', async () => {
+                await page.getByRole('button', { name: 'Continue' }).click();
+            });
+
+            // Get validation message
+            await test.step('Check for error message', async () => {
+                await expect(page.locator('#error-password')).toBeVisible();
+            });
+
+            await test.step('Attach screenshot of failed registration', async () => {
+                await attachScreenshot(page, testInfo, REGISTRATION_FAILURE_SCREENSHOT);
+            });
+
+        });
+            // await page.goto('http://localhost:5173/sign-in');
+            // await page.getByRole('link', { name: 'Sign up' }).click();
+            // await page.locator('[id="firstName-field"]').fill('newuser4')
+            // await page.locator('[id="lastName-field"]').fill('user45')
+            // await page.locator('[id="username-field"]').fill('newuser41')
+            // await page.locator('[id="emailAddress-field"]').fill('newuser41@example.com')
+            // await page.locator('[id="password-field"]').fill('new')
+            // await page.getByRole('button', { name: 'Continue' }).click();
+
+            // await expect(page.locator('#error-password')).toBeVisible();
+
+            // });
 
 
     //         // spotted a security gap HERE (input not sanitized, no error message)

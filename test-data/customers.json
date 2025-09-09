@@ -12,5 +12,12 @@
     "username": "johnDoe",
     "email": "john@example.com",
     "password": "john123"
+  },
+  {
+    "firstName": "newuser4",
+    "lastName": "Doe",
+    "username": "newuser4",
+    "email": "newuser4@example.com",
+    "password": "new"
   }
 ]
