@@ -18,22 +18,32 @@ export class LoginPage {
     public readonly userEmail: Locator;      // User email element
     public readonly openUserButton: Locator;    // Profile popover button
     public readonly signOutMenuItem: Locator;
+    public readonly signInSubHeading: Locator;
+    public readonly actionText: Locator;
+    public readonly signInStartActionLink: Locator;
 
 
     /**
      * Initializes all locators using the provided Playwright Page object.
      */
     constructor(public readonly page: Page) {
-        this.identifierInput = page.getByRole('textbox', { name: 'Email address or username' });
-        this.passwordInput = page.getByRole('textbox', { name: 'Password' });
+
+        // form elements
+        this.identifierInput = page.locator('input[id="identifier-field"]');
+        this.passwordInput = page.locator('input[id="password-field"]');
+
+        // other elements
         this.continueButton = page.getByRole('button', { name: 'Continue' });
         this.signInHeading = page.getByRole('heading', { name: 'Sign in to Tripinas' });
+        this.signInSubHeading = page.getByText('Welcome back! Please sign in to continue');
         this.welcomeHeading = page.getByRole('heading', { name: 'Welcome to your admin dashboard!' });
+        this.actionText = page.getByText('Don’t have an account?');
+        this.signInStartActionLink = page.getByRole('link', { name: 'Sign up' });
         this.errorPassword = page.locator('#error-password');
         this.errorIdentifier = page.locator('#error-identifier');
-        this.userFullName = page.getByTestId('user-fullname');   
-        this.userUsername = page.getByTestId('user-username');  
-        this.userEmail = page.getByTestId('user-email');
+        this.userFullName = page.locator('input[id="user-fullname"]');
+        this.userUsername = page.locator('input[id="user-username"]');
+        this.userEmail = page.locator('input[id="user-email"]');
         this.openUserButton = page.getByRole('button', { name: 'Open user button' });
         this.signOutMenuItem = page.getByRole('menuitem', { name: 'Sign out' });
     }
@@ -134,5 +144,32 @@ export class LoginPage {
     return await this.identifierInput.evaluate((el: HTMLInputElement) => el.validationMessage);
     }
 
+    async verifyHeadingIsVisible(): Promise<void> {
+        await expect(this.signInHeading).toBeVisible();
+    }
+
+    async verifySubHeadingIsVisible(): Promise<void> {
+        await expect(this.signInSubHeading).toBeVisible();
+    }
+
+    async verifyIdentifierFieldIsVisible(): Promise<void> {
+        await expect(this.identifierInput).toBeVisible();
+    }
+
+    async verifyPasswordFieldIsVisible(): Promise<void> {
+        await expect(this.passwordInput).toBeVisible();
+    }
+
+    async verifyContinueButtonIsVisible(): Promise<void> {
+        await expect(this.continueButton).toBeVisible();
+    }
+
+    async verifyActionTextIsVisible(): Promise<void> {
+        await expect(this.actionText).toBeVisible();
+    }
+    async verifySignUpLinkIsVisible(): Promise<void> {
+        await expect(this.signInStartActionLink).toBeVisible();
+        await expect(this.signInStartActionLink).toHaveAttribute('href', 'http://localhost:5173/sign-up');
+    }
 
 }

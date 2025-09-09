@@ -21,6 +21,7 @@ public readonly signInUrl = 'http://localhost:5173/sign-in';
   public readonly dashboardLink;
   public readonly userMenuButton;
   public readonly signOutButton;
+  public readonly errorPassword;
 
   constructor(public readonly page: Page) {
 
@@ -33,11 +34,12 @@ public readonly signInUrl = 'http://localhost:5173/sign-in';
     this.passwordField = page.locator('input[id="password-field"]');
     this.continueButton = page.getByRole('button', { name: 'Continue' });
 
-    // dashboard elements
+    // other elements
     this.headingDashboard = page.getByRole('heading', { name: 'Dashboard Home' });
-    this.userFullname = page.getByTestId('user-fullname');
-    this.userUsername = page.getByTestId('user-username');
-    this.userEmail = page.getByTestId('user-email');
+    this.userFullname = page.locator('input[id="user-fullname"]');
+    this.userUsername = page.locator('input[id="user-username"]');
+    this.userEmail = page.locator('input[id="user-email"]');
+    this.errorPassword = page.locator('text=Your password must contain 8 or more characters.');
     this.welcomeHeading = page.getByRole('heading', { name: 'Welcome to your admin' });
     this.adminHeading = page.getByRole('heading', { name: 'Admin', exact: true });
     this.dashboardLink = page.getByRole('link', { name: 'Dashboard' });
@@ -66,8 +68,36 @@ public readonly signInUrl = 'http://localhost:5173/sign-in';
 
   }
 
-  async logout() {
+  async logout(): Promise<void> {
     await this.userMenuButton.click();
     await this.signOutButton.click();
   }
+
+  async inputfirstname(firstname: string): Promise<void> {
+    await this.firstNameField.fill(firstname);
+  }
+
+  async inputlastname(lastname: string): Promise<void> {
+    await this.lastNameField.fill(lastname);
+  }
+
+  async inputusername(username: string): Promise<void> {
+    await this.usernameField.fill(username);
+  }
+  
+  async inputemail(email: string): Promise<void> {
+    await this.emailField.fill(email);    
+
+  } 
+  async inputpassword(password: string): Promise<void> {
+    await this.passwordField.fill(password);    
+  } 
+  async verifyContinueButtonIsVisible(): Promise<void> {
+    await expect(this.continueButton).toBeVisible();
+  }
+
+  async checkerrormessage(): Promise<void> {
+    await expect(this.errorPassword).toBeVisible();
+  }
+
 }

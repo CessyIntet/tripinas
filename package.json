@@ -16,7 +16,8 @@
     "e2e-auth": "npx playwright test tests/features/e2e-auth.spec.ts --project chromium --trace on",
     "e2e-unauth": "npx playwright test tests/features/e2e-unauth.spec.ts --project chromium",
     "user-api-test": "npx playwright test user.api.spec.ts --project api",
-    "ui-registration-test": "npx playwright test tests/ui-validation/ui-registration.spec.ts --project chromium"
+    "ui-registration-test": "npx playwright test tests/ui-validation/ui-registration.spec.ts --project chromium",
+    "ui-login-test": "npx playwright test tests/ui-validation/ui-login.spec.ts --project chromium"
 
 
   },
