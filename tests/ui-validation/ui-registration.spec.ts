@@ -14,9 +14,9 @@ test.describe("Registration Test Suites",{ tag: ["@Regression", "@Sprint-1", "@H
         await registrationPage.navigateTo();
     });
 
-    // ---------------- Positive Tests ----------------
+    // ---------------- Positive Test ----------------
 
-     test('Verify that UI displays registration form', async ({ page }, testInfo) => {
+     test('Verify that UI displays registration form',{tag: "@Happy-Path"}, async ({ page }, testInfo) => {
 
         await test.step('First Name Field', async () => {
             await expect(page.locator('[id="firstName-field"]')).toBeVisible();
@@ -47,8 +47,8 @@ test.describe("Registration Test Suites",{ tag: ["@Regression", "@Sprint-1", "@H
         });
     });
          
-
-    test('Verify that user is unable to register with invalid data', async ({ page }, testInfo) => {
+    // ---------------- Negative Tests ----------------
+    test('Verify that user is unable to register with invalid data',{tag: "@Negative"}, async ({ page }, testInfo) => {
         // Select the 2nd customer (with invalid password)
     const customer = users[1];
 
@@ -88,8 +88,8 @@ test.describe("Registration Test Suites",{ tag: ["@Regression", "@Sprint-1", "@H
 
 
 
-            //Negative testing (empty field)
-    test.only('Verify that user is unable to register with empty fields', async ({ page }, testInfo) => {
+    //Negative testing (empty field)
+    test.only('Verify that user is unable to register with empty fields',{tag: "@Negative"}, async ({ page }, testInfo) => {
         
         
         await test.step('Click continue button with the fields empty', async () => {
@@ -110,8 +110,10 @@ test.describe("Registration Test Suites",{ tag: ["@Regression", "@Sprint-1", "@H
 
     });
 
-    test('Boundary test: Min Password Length', async ({ page }, testInfo) => {
-        
+
+    // ---------------- Boundary Test ----------------
+    test('Boundary test: Min Password Length',{tag: "@Boundary"}, async ({ page }, testInfo) => {
+
     // Select the 3rd customer (with 3-character password)
     const customer = users[2];
 
@@ -151,10 +153,10 @@ test.describe("Registration Test Suites",{ tag: ["@Regression", "@Sprint-1", "@H
         });
 
 
-    //         // spotted a security gap HERE (input not sanitized, no error message)
-    //         // to raise this Sir Reg
+    // ---------------- Security Test ----------------      
+    // spotted a security gap HERE
 
-    test.only('Security test: Should not allow XSS attack in registration form', async ({ page }, testInfo) => {
+    test.only('Security test: Should not allow XSS attack in registration form',{tag: "@Security"}, async ({ page }, testInfo) => {
         testInfo.annotations.push({
           type: 'Security gap',
           description: 'input not sanitized, no error message',
