@@ -41,9 +41,9 @@ export class LoginPage {
         this.signInStartActionLink = page.getByRole('link', { name: 'Sign up' });
         this.errorPassword = page.locator('#error-password');
         this.errorIdentifier = page.locator('#error-identifier');
-        this.userFullName = page.locator('input[id="user-fullname"]');
-        this.userUsername = page.locator('input[id="user-username"]');
-        this.userEmail = page.locator('input[id="user-email"]');
+        this.userFullName = page.locator('[data-test="userfullname"]');
+        this.userUsername = page.locator('[data-test="username"]');
+        this.userEmail = page.locator('[data-test="email"]');
         this.openUserButton = page.getByRole('button', { name: 'Open user button' });
         this.signOutMenuItem = page.getByRole('menuitem', { name: 'Sign out' });
     }
@@ -178,6 +178,10 @@ export class LoginPage {
         await this.identifierInput.fill(identifier);
         await this.passwordInput.fill(passwordInput);
         await this.continueButton.click();
+    }
+    async verifyLoginSuccessful(expectedUrl: string = 'http://localhost:5173/dashboard'): Promise<void> {
+    await this.page.waitForURL(expectedUrl);
+    await expect(this.page).toHaveURL(expectedUrl);
     }
 
 }

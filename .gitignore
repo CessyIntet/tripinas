@@ -147,3 +147,4 @@ vite.config.ts.timestamp-*
 
 .auth/user.json
 test-screenshots/
+test-data/
