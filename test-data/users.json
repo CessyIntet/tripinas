@@ -1,8 +1,10 @@
 [
   {
-    "fullName": "Reginald Offemaria",
-    "username": "regietest21",
-    "email": "regietest@example.com",
-    "password": "regietest"
+    "fullName": "Pedra rami",
+    "firstName": "Pedra",
+    "lastName": "rami",
+    "username": "ramipedra",
+    "email": "pedra@example.com",
+    "password": "ped!785753"
   }
 ]

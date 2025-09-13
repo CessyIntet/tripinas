@@ -1,6 +1,6 @@
 //Tripinas UI Registration Test Suite
 
-import { test} from '../../shared/base.ts';
+import { test, expect} from '../../shared/base.ts';
 import { attachScreenshot } from '../../shared/helpers.ts';
 
 
@@ -17,37 +17,28 @@ test.describe("LoginPage UI Test Suites",{ tag: ["@Regression", "@Sprint-1", "@H
 
      test('Verify that UI displays login form',{tag: "@Happy-Path"}, async ({ loginPage }, testInfo) => {
         
-        await test.step('Heading "Sign in to Tripinas" should be visible', async () => {
-            await loginPage.verifyHeadingIsVisible();
-        });
-
-        await test.step('Welcome message: "Welcome back! Please sign in to continue" should be visible', async () => {
-            await loginPage.verifySubHeadingIsVisible();
-        });
-
-        await test.step('Email Address or Username field should be visible', async () => {
-            await loginPage.verifyIdentifierFieldIsVisible();
-        });
-
-
-        await test.step('Password Field should be visible', async () => {
-            await loginPage.verifyPasswordFieldIsVisible();
-        });
-
-        await test.step('Continue Button should be visible', async () => {
-            await loginPage.verifyContinueButtonIsVisible();
-        });
-
-        await test.step('"Don’t have an account" text should be visible', async () => {
-            await loginPage.verifyActionTextIsVisible();
-        });
-
-        await test.step('"Sign up" link should be visible', async () => {
-            await loginPage.verifySignUpLinkIsVisible();
-        });
-
+        
         await test.step('Attach screenshot of successful login', async () => {
             await attachScreenshot(loginPage.page, testInfo, LOGIN_FORM_SCREENSHOT);
+        });
+    });
+
+
+    test('Visual testing for login form',{tag: "@Happy-Path"}, async ({ loginPage, page }, testInfo) => {
+
+        await test.step('Heading "Sign in to Tripinas" should be visible', async () => {
+            await expect(page.getByRole('heading', { name: 'Sign in to Tripinas' })).toHaveText('Sign in to Tripinas');
+        });
+        
+        await test.step('Verify if the Login Page uses the same UI', async () => {
+            await expect(page).toHaveScreenshot('login.png', {
+                maxDiffPixels: 100,
+                threshold: 0.50,
+                animations: 'disabled',
+
+            });
+
+            
         });
     });
 

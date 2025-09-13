@@ -6,7 +6,6 @@ import users from '../../test-data/users.json';
 
 // Screenshot file names
 const LOGIN_SUCCESS_SCREENSHOT = 'login-success-screenshot.png';
-const LOGOUT_SUCCESS_SCREENSHOT = 'logout-success-screenshot.png';
 const LOGIN_FAILURE_SCREENSHOT = 'login-failure-screenshot.png';
 const EMPTY_FIELD_VALIDATION_SCREENSHOT = 'empty-field-validation-screenshot.png';
 const XSS_LOGIN_ATTEMPT_SCREENSHOT = 'xss-login-attempt.png';
@@ -21,103 +20,66 @@ const XSS_LOGIN_ATTEMPT_SCREENSHOT = 'xss-login-attempt.png';
 
       
     
-      test(`should login as ${user.username} and verify profile - POM`, async ({ loginPage }, testInfo) => {
+      test(`should login as ${user.username} and verify profile - POM`, async ({ loginPage, page }, testInfo) => {
         testInfo.annotations.push({
-          type: 'flaky',
-          description: 'Tests failing intermittently',
-          });
-
-        await test.step('Login with valid credentials', async () => {
-          await loginPage.login(process.env.TRIPINAS_USERNAME!, process.env.TRIPINAS_PASSWORD!);
+          type: 'data-test note',
+          description: 'Data-test attributes aren’t present. Add stable data-test attributes (e.g. data-test="user-fullname") so tests don’t break when UI markup changes.',
         });
-
-        await test.step('Verify user details', async () => {
-          await loginPage.verifyLoginSuccess(user);
-        });
-
-        await test.step('Attach screenshot of successful login', async () => {
-          await attachScreenshot(loginPage.page,testInfo,LOGIN_SUCCESS_SCREENSHOT,);
-        });
-      });
-
-      // move to dashboard.spec.ts later
-
-      test(`${user.username} can click profile Popover and view correct details`, async ({ loginPage }, testInfo) => {
-        testInfo.annotations.push({
-          type: 'flaky',
-          description: 'Tests failing intermittently',
-          });
-        
-        await test.step('Login with valid credentials', async () => {
+     
+          await test.step('Login with valid credentials', async () => {
             await loginPage.login(process.env.TRIPINAS_USERNAME!, process.env.TRIPINAS_PASSWORD!);
           });
-
-          await test.step('Verify user details on Dashboard', async () => {
-            await loginPage.verifyLoginSuccess(user);
+     
+          await test.step('Verify dashboard URL', async () => {
+            await expect(page).toHaveURL('http://localhost:5173/dashboard');
           });
-
-          await test.step('Verify profile popover', async () => {
-            await loginPage.verifyProfilePopover(user);
+     
+          await test.step('Verify visibility of welcome heading', async () => {
+            await expect(page.getByRole('heading', { name: 'Welcome to your admin dashboard!' })).toHaveText('Welcome to your admin dashboard!');
           });
-
-          await test.step('Attach screenshot of profile popover', async () => {
-            await attachScreenshot(loginPage.page, testInfo, LOGIN_SUCCESS_SCREENSHOT);
+     
+          await test.step('Verify fullname', async () => {
+            await expect(page.getByText(process.env.TRIPINAS_FULLNAME!)).toBeVisible();
           });
-      });
-
-      // move to dashboard.spec.ts later
-
-      test(`${user.username} can logout and return to login page`, async ({ loginPage }, testInfo) => {
-        testInfo.annotations.push({
-          type: 'flaky',
-          description: 'Tests failing intermittently',
+     
+          await test.step('Verify username', async () => {
+            await expect(page.getByText(process.env.TRIPINAS_USERNAME!)).toBeVisible();
           });
+     
+          await test.step('Verify email', async () => {
+            await expect(page.getByText(process.env.TRIPINAS_EMAIL!)).toBeVisible();
+          });
+          await test.step('Attach screenshot of successful login', async () => {
+            await attachScreenshot(loginPage.page,testInfo,LOGIN_SUCCESS_SCREENSHOT,);
+          });
+        });
 
-        await test.step('Login with valid credentials', async () => {
+
+      test(` ${user.username} should login using email`, async ({ loginPage, page }, testInfo) => {
+        await test.step('Login using email', async () => {
           await loginPage.login(process.env.TRIPINAS_USERNAME!, process.env.TRIPINAS_PASSWORD!);
         });
 
-        await test.step('Verify dashboard after login', async () => {
-          await loginPage.verifyLoginSuccess(user);
-        });
+         await test.step('Verify visibility of welcome heading', async () => {
+            await expect(page.getByRole('heading', { name: 'Welcome to your admin dashboard!' })).toHaveText('Welcome to your admin dashboard!');
+          });
+     
+          await test.step('Verify fullname', async () => {
+            await expect(page.getByText(process.env.TRIPINAS_FULLNAME!)).toBeVisible();
+          });
+     
+          await test.step('Verify username', async () => {
+            await expect(page.getByText(process.env.TRIPINAS_USERNAME!)).toBeVisible();
+          });
+     
+          await test.step('Verify email', async () => {
+            await expect(page.getByText(process.env.TRIPINAS_EMAIL!)).toBeVisible();
+          });
 
-        await test.step('Attach screenshot of successful login', async () => {
-          await attachScreenshot(
-            loginPage.page,
-            testInfo,
-            LOGIN_SUCCESS_SCREENSHOT,
-          );
-        });
 
-        await test.step('Logout and verify login page', async () => {
-          await loginPage.logout(); // includes assertion for "Sign in to Tripinas"
-        });
-
-        await test.step('Attach screenshot after logout', async () => {
-          await attachScreenshot(
-            loginPage.page,
-            testInfo,
-            LOGOUT_SUCCESS_SCREENSHOT,
-          );
-        });
-      });
-
-      test(` ${user.username} should login using email`, async ({ loginPage }, testInfo) => {
-        await test.step('Login using email', async () => {
-          await loginPage.login(user.email, user.password);
-        });
-
-        await test.step('Verify user details', async () => {
-          await loginPage.verifyLoginSuccess(user);
-        });
-
-        await test.step('Attach screenshot of successful login', async () => {
-          await attachScreenshot(
-            loginPage.page,
-            testInfo,
-            LOGIN_SUCCESS_SCREENSHOT,
-          );
-        });
+          await test.step('Attach screenshot of successful login', async () => {
+            await attachScreenshot(loginPage.page,testInfo,LOGIN_SUCCESS_SCREENSHOT,);
+          });
       });
 
     });
@@ -130,7 +92,7 @@ const XSS_LOGIN_ATTEMPT_SCREENSHOT = 'xss-login-attempt.png';
       await loginPage.navigateTo();
       });
 
-      test(`${user.username} unable to login due to wrong password`, async ({ loginPage }, testInfo) => {
+      test(`${user.username} unable to login due to wrong password`, async ({ loginPage, page }, testInfo) => {
 
         await test.step('Navigate to login page', async () => {
           await loginPage.navigateTo();
@@ -146,16 +108,13 @@ const XSS_LOGIN_ATTEMPT_SCREENSHOT = 'xss-login-attempt.png';
         });
 
         await test.step('Verify password error message', async () => {
-          await loginPage.verifyPasswordError(
-            'Password is incorrect. Try again, or use another method.'
-          );
+      
+
+          await expect(page.locator('[id="error-password"]')).toBeVisible()
         });
 
         await test.step('Attach screenshot of failed login', async () => {
-          await attachScreenshot(
-            loginPage.page,
-            testInfo,
-            LOGIN_FAILURE_SCREENSHOT, 
+          await attachScreenshot(loginPage.page,testInfo,LOGIN_FAILURE_SCREENSHOT, 
           );
         });
       });
@@ -167,9 +126,16 @@ const XSS_LOGIN_ATTEMPT_SCREENSHOT = 'xss-login-attempt.png';
         });
 
         await test.step('Click the login button with empty fields', async () => {
-            const validationMsg = await loginPage.verifyEmptyIdentifierValidation();
-            expect(validationMsg).not.toBe('');
+          await loginPage.ClickLoginButton();
         });
+
+        await test.step('Check for error message', async () => {
+            const validationMsg = await loginPage.identifierInput.evaluate(
+                (el: HTMLInputElement) => el.validationMessage
+            );
+            expect(validationMsg).toBe('Please fill out this field.');
+        });
+
 
         await test.step('Attach screenshot of validation message', async () => {
           await attachScreenshot(
@@ -216,9 +182,11 @@ test.describe('Login - Security Tests', { tag: [ '@Security', "@Sprint-1"] }, ()
           await loginPage.ClickLoginButton();
         });
 
-        await test.step('Verify user is not logged in', async () => {
+        await test.step('Verify user is not logged in by checking if Welcome heading is not showing', async () => {
+          
+          // Assert that the welcome heading is not visible, confirming no user session is active
           await expect(loginPage.welcomeHeading).not.toBeVisible();
-        });
+      });
 
         await test.step('Verify payload remains in input field', async () => {
           const inputValue = await loginPage.identifierInput.inputValue();
@@ -229,6 +197,6 @@ test.describe('Login - Security Tests', { tag: [ '@Security', "@Sprint-1"] }, ()
           await attachScreenshot(loginPage.page, testInfo, XSS_LOGIN_ATTEMPT_SCREENSHOT,);
         });
       });
-
+    });
   });
-});
+

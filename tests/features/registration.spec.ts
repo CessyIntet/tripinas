@@ -2,22 +2,24 @@ import { test, expect } from '../../shared/base';
 import customers from "../../test-data/customers.json";
 import { attachScreenshot } from '../../shared/helpers.ts';
 import users from '../../test-data/customers.json';
+import newcustomers from '../../test-data/new-customers.json';
 // import fakeUsers from '../../shared/apiUtils.ts';
 
 const REGISTER_SUCCESS_SCREENSHOT = 'register-success-screenshot.png';
 const REGISTRATION_FAILURE_SCREENSHOT = 'register-form-failure-screenshot.png';
 
-test.describe("Registration Test Suites",{ tag: ["@Data-Driven", "@Regression", "@Sprint-1", "@High-Priority"] },() => {
+test.describe("Customer Registration - Positive Test", { tag: ["@Data-Driven", "@Regression", "@Sprint-1", "@High-Priority"] }, () => {
     
-    test.beforeEach(async ({ registrationPage }) => {
-        await registrationPage.navigateTo();
-    });
+    newcustomers.forEach((customer) => {
 
-    test(`Should register customer and Assert Welcome message`, {tag: "@Happy-Path"}, async ({ registrationPage }, testInfo) => {
-      for (const customer of customers) {
+
+    test(`Should register customer: ${customer.username} and assert welcome message`, {tag: "@Happy-Path"}, async ({ registrationPage, dashboardPage, page}, testInfo) => {
+  
+
+         await registrationPage.navigateTo();
         
           // Fill out the registration form
-          await test.step(`Register and verify customer: ${customer.username}`, async () => {
+          await test.step(`Fill registration form for ${customer.username}`, async () => {
             await registrationPage.fillForm(customer);
           });
 
@@ -25,26 +27,52 @@ test.describe("Registration Test Suites",{ tag: ["@Data-Driven", "@Regression", 
           await test.step('Submit form', async () => {
             await registrationPage.submit();
           });
+            // Assert: user is redirected to dashboard
 
-          // Verify the user data on the dashboard
-          await test.step('Verify user data on the dashboard', async () => {
-            await registrationPage.assertDashboard(`${customer.firstName} ${customer.lastName}`);
-          });
+            await test.step('Verify dashboard redirect', async () => {
+                await expect(page).toHaveURL('http://localhost:5173/dashboard');
+                await expect(page.getByRole('heading', { name: 'Welcome to your admin dashboard!' })).toHaveText('Welcome to your admin dashboard!');
+            });
+
+            
+
+            await test.step('Verify fullname', async () => {
+            await expect(page.getByText((`${customer.firstName} ${customer.lastName}`))).toBeVisible();
+            });
+
+            await test.step('Verify username', async () => {
+            await expect(page.getByText((`${customer.username}`))).toBeVisible();
+            });
+
+            await test.step('Verify email', async () => {
+            await expect(page.getByText((`${customer.email}`))).toBeVisible();
+            });
+
 
           await test.step('Attach screenshot of successful login', async () => {
-              await attachScreenshot(registrationPage.page,testInfo,REGISTER_SUCCESS_SCREENSHOT);
+              await attachScreenshot(page,testInfo,REGISTER_SUCCESS_SCREENSHOT);
           });
 
-          // Log out and go back to the registration page
-          await test.step('Click log out', async () => {
-            await registrationPage.logout();
+
+          await test.step('Logout and verify login page', async () => {
+            await dashboardPage.logout(); 
+            await expect(page).toHaveURL('http://localhost:5173/sign-in');
+            await expect(page.getByRole('heading', { name: 'Sign in to Tripinas' })).toHaveText('Sign in to Tripinas');
           });
-        
-      
-      }}); 
+        });
+    });
+
+});
+
+
+test.describe("Registration Page Test Suites",{ tag: ["@Data-Driven", "@Regression", "@Sprint-1", "@High-Priority"] },() => {
+    
+    test.beforeEach(async ({ registrationPage }) => {
+        await registrationPage.navigateTo();
+    });
 
     // ---------------- Negative Tests ----------------
-    test('Verify that user is unable to register with invalid data',{tag: "@Negative"}, async ({ registrationPage }, testInfo) => {
+    test('Verify that user is unable to register with invalid data',{tag: "@Negative"}, async ({ registrationPage, page }, testInfo) => {
         // Select the 2nd customer (with invalid password)
       const customer = users[1];
 
@@ -68,13 +96,13 @@ test.describe("Registration Test Suites",{ tag: ["@Data-Driven", "@Regression", 
             await registrationPage.inputpassword(customer.password); // Invalid password
         });
 
-        await test.step('Click continue button', async () => {
-            await registrationPage.verifyContinueButtonIsVisible();
+        await test.step('Submit or click continue button', async () => {
+            await registrationPage.clickContinue();
         });
 
         // Get validation message
         await test.step('Check for error message', async () => {
-            await registrationPage.checkerrormessage();
+            await expect(page.locator('[id="error-password"]')).toBeVisible()
         });
 
         await test.step('Attach screenshot of failed registration', async () => {
@@ -89,7 +117,7 @@ test.describe("Registration Test Suites",{ tag: ["@Data-Driven", "@Regression", 
         
         
         await test.step('Click continue button with the fields empty', async () => {
-            await registrationPage.continueButton.click();
+            await registrationPage.clickContinue();
         });
 
         // Get validation message
@@ -108,7 +136,7 @@ test.describe("Registration Test Suites",{ tag: ["@Data-Driven", "@Regression", 
 
 
     // ---------------- Boundary Test ----------------
-    test('Boundary test: Min Password Length',{tag: "@Boundary"}, async ({ registrationPage }, testInfo) => {
+    test('Boundary test: Min Password Length',{tag: "@Boundary"}, async ({ registrationPage , page}, testInfo) => {
 
     // Select the 3rd customer (with 3-character password)
     const customer = users[2];
@@ -137,22 +165,21 @@ test.describe("Registration Test Suites",{ tag: ["@Data-Driven", "@Regression", 
             await registrationPage.continueButton.click();
         });
 
-        // Get validation message
         await test.step('Check for error message', async () => {
-            await registrationPage.checkerrormessage();
+            await expect(page.locator('[id="error-password"]')).toBeVisible()
         });
 
         await test.step('Attach screenshot of failed registration', async () => {
             await attachScreenshot(registrationPage.page, testInfo, REGISTRATION_FAILURE_SCREENSHOT);
         });
 
-        });
+    });
 
 
     // ---------------- Security Test ----------------      
     // spotted a security gap HERE
 
-    test('Security test: Should not allow XSS attack in registration form',{tag: "@Security"}, async ({ registrationPage }, testInfo) => {
+    test('Security test: Should not allow XSS attack in registration form',{tag: "@Security"}, async ({ registrationPage, page }, testInfo) => {
         testInfo.annotations.push({
           type: 'Security gap',
           description: 'input not sanitized, no error message',
@@ -180,8 +207,9 @@ test.describe("Registration Test Suites",{ tag: ["@Data-Driven", "@Regression", 
 
                 //  Assert: user should not be logged in / redirected
                 await test.step('User should still be on registration page', async () => {
-                    await registrationPage.verifyFirstNameFieldIsVisible();
+                    await expect(page.locator('[id="firstName-field"]')).toBeVisible();
                 });
+
 
                 //  Assert: input still contains the payload (echoed raw, which is bad but not executed)
                 await test.step('Input still contains the script (echoed raw, which is bad but not executed)', async () => {

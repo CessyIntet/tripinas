@@ -1,10 +1,10 @@
 [
   {
-    "firstName": "Pedra",
-    "lastName": "rami",
-    "username": "ramiPedra",
-    "email": "pedra@example.com",
-    "password": "ped!785753"
+    "firstName": "Alvin",
+    "lastName": "Santos",
+    "username": "Alvin03santos",
+    "email": "alvin@example.com",
+    "password": "vno!785753"
   },
   {
     "firstName": "John",
@@ -19,5 +19,13 @@
     "username": "newuser4",
     "email": "newuser4@example.com",
     "password": "new"
+  },
+
+   {
+    "firstName": "Lanie",
+    "lastName": "Vargas",
+    "username": "acer153",
+    "email": "newuser4@example.com",
+    "password": "newDoe75136"
   }
 ]

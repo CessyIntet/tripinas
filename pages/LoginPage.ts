@@ -41,9 +41,9 @@ export class LoginPage {
         this.signInStartActionLink = page.getByRole('link', { name: 'Sign up' });
         this.errorPassword = page.locator('#error-password');
         this.errorIdentifier = page.locator('#error-identifier');
-        this.userFullName = page.locator('[data-test="userfullname"]');
-        this.userUsername = page.locator('[data-test="username"]');
-        this.userEmail = page.locator('[data-test="email"]');
+        this.userFullName = page.locator('[data-test="user-fullname"]');
+        this.userUsername = page.locator('[data-test="user-username"]');
+        this.userEmail = page.locator('[data-test="user-email"]');
         this.openUserButton = page.getByRole('button', { name: 'Open user button' });
         this.signOutMenuItem = page.getByRole('menuitem', { name: 'Sign out' });
     }
@@ -85,12 +85,6 @@ export class LoginPage {
 
         await expect(this.welcomeHeading).toBeVisible();
         await expect(this.welcomeHeading).toHaveText('Welcome to your admin dashboard!');
-        await expect(this.userFullName).toBeVisible();
-        await expect(this.userFullName).toContainText(user.fullName);
-        await expect(this.userUsername).toBeVisible();
-        await expect(this.userUsername).toContainText(user.username);
-        await expect(this.userEmail).toBeVisible();
-        await expect(this.userEmail).toContainText(user.email);
     }
 
      /**
@@ -98,10 +92,6 @@ export class LoginPage {
      * @param expectedErrorMessage - The expected error message text.
      */
 
-    async verifyLoginError(expectedErrorMessage: string): Promise<void> {
-        await expect(this.errorPassword).toBeVisible();
-        await expect(this.errorPassword).toHaveText(expectedErrorMessage);
-    }
 
     /* Modular Package Object Model */
     async InputIdentifier(identifier: string): Promise<void> {
@@ -114,63 +104,24 @@ export class LoginPage {
         await this.continueButton.click();
     }
 
-    async verifyProfilePopover(user: { fullName: string; username: string }) {
-    await this.page.getByRole('button', { name: 'Open user button' }).click();
-    await expect(this.page.getByLabel('User button popover')).toContainText(user.fullName);
-    await expect(this.page.getByLabel('User button popover')).toContainText(user.username);
+    async ClickProfilePopover() {
+        await this.page.getByRole('button', { name: 'Open user button' }).click();
     }
 
     async logout() {
-    await this.openUserButton.click();
-    await this.signOutMenuItem.click();
-    await this.page.waitForURL('http://localhost:5173/sign-in');
-    await expect(this.signInHeading).toBeVisible();
+        await this.openUserButton.click();
+        await this.signOutMenuItem.click();
     }
 
     async loginWithWrongPassword(identifier: string, wrongPassword: string): Promise<void> {
-    await this.identifierInput.fill(identifier);
-    await this.passwordInput.fill(wrongPassword);
-    await this.continueButton.click();
+        await this.identifierInput.fill(identifier);
+        await this.passwordInput.fill(wrongPassword);
+        await this.continueButton.click();
     }
 
-    async verifyPasswordError(expectedMessage: string): Promise<void> {
-    await expect(this.errorPassword).toBeVisible();
-    await expect(this.errorPassword).toContainText(expectedMessage);
-    }
 
-    async verifyEmptyIdentifierValidation(): Promise<string> {
-    await this.continueButton.click();
-    // returns the browser's built-in validation message
-    return await this.identifierInput.evaluate((el: HTMLInputElement) => el.validationMessage);
-    }
 
-    async verifyHeadingIsVisible(): Promise<void> {
-        await expect(this.signInHeading).toBeVisible();
-    }
-
-    async verifySubHeadingIsVisible(): Promise<void> {
-        await expect(this.signInSubHeading).toBeVisible();
-    }
-
-    async verifyIdentifierFieldIsVisible(): Promise<void> {
-        await expect(this.identifierInput).toBeVisible();
-    }
-
-    async verifyPasswordFieldIsVisible(): Promise<void> {
-        await expect(this.passwordInput).toBeVisible();
-    }
-
-    async verifyContinueButtonIsVisible(): Promise<void> {
-        await expect(this.continueButton).toBeVisible();
-    }
-
-    async verifyActionTextIsVisible(): Promise<void> {
-        await expect(this.actionText).toBeVisible();
-    }
-    async verifySignUpLinkIsVisible(): Promise<void> {
-        await expect(this.signInStartActionLink).toBeVisible();
-        await expect(this.signInStartActionLink).toHaveAttribute('href', 'http://localhost:5173/sign-up');
-    }
+    
 
     async LoginValidUser(identifier: string, passwordInput: string): Promise<void> {
         await this.page.goto('http://localhost:5173/sign-in');
@@ -178,10 +129,6 @@ export class LoginPage {
         await this.identifierInput.fill(identifier);
         await this.passwordInput.fill(passwordInput);
         await this.continueButton.click();
-    }
-    async verifyLoginSuccessful(expectedUrl: string = 'http://localhost:5173/dashboard'): Promise<void> {
-    await this.page.waitForURL(expectedUrl);
-    await expect(this.page).toHaveURL(expectedUrl);
     }
 
 }

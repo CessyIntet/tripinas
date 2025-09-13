@@ -50,6 +50,7 @@ export class RegistrationPage {
   async navigateTo(): Promise<void> {
         await this.page.goto('http://localhost:5173/sign-in');
         await this.page.waitForLoadState('networkidle');
+        await this.signUpLink.click();
     }
 
   async fillForm(customer: any) {
@@ -64,10 +65,6 @@ export class RegistrationPage {
     await this.continueButton.click();
   }
 
-  async assertDashboard(userFullname: string) {
-    await expect(this.welcomeHeading).toBeVisible();
-
-  }
 
   async logout(): Promise<void> {
     await this.userMenuButton.click();
@@ -90,31 +87,13 @@ export class RegistrationPage {
     await this.emailField.fill(email);    
 
   } 
+
   async inputpassword(password: string): Promise<void> {
     await this.passwordField.fill(password);    
-  } 
-  async verifyContinueButtonIsVisible(): Promise<void> {
-    await expect(this.continueButton).toBeVisible();
   }
 
-  async checkerrormessage(): Promise<void> {
-    await expect(this.errorPassword).toBeVisible();
+  async clickContinue(): Promise<void> {
+    await this.continueButton.click();    
   }
-
-  async verifyFirstNameFieldIsVisible(): Promise<void> {
-    await expect(this.firstNameField).toBeVisible();
-  }
-  async verifyLastNameFieldIsVisible(): Promise<void> {
-    await expect(this.lastNameField).toBeVisible();
-  }
-  async verifyUsernameFieldIsVisible(): Promise<void> {
-    await expect(this.usernameField).toBeVisible();
-  }
-  async verifyEmailFieldIsVisible(): Promise<void> {
-    await expect(this.emailField).toBeVisible();
-  }
-  async verifyPasswordFieldIsVisible(): Promise<void> {
-    await expect(this.passwordField).toBeVisible();
-  }       
 
 }
