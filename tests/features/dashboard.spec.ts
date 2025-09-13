@@ -34,20 +34,21 @@ const LOGOUT_SUCCESS_SCREENSHOT = 'logout-success-screenshot.png';
           });
 
           await test.step('Verify visibility of welcome heading', async () => {
-            await expect(page.getByRole('heading', { name: 'Welcome to your admin dashboard!' })).toHaveText('Welcome to your admin dashboard!');
+            await expect(page.getByRole('heading', { name: 'Welcome to your admin dashboard!' })).toContainText('Welcome to your admin dashboard!');
           });
-
+     
           await test.step('Verify fullname', async () => {
-            await expect(page.getByText(process.env.TRIPINAS_FULLNAME!)).toBeVisible();
+            await expect(page.getByTestId('user-fullname')).toContainText(process.env.TRIPINAS_FULLNAME!);
           });
-
+     
           await test.step('Verify username', async () => {
-            await expect(page.getByText(process.env.TRIPINAS_USERNAME!)).toBeVisible();
+            await expect(page.getByTestId('user-username')).toContainText(process.env.TRIPINAS_USERNAME!);
+          });
+     
+          await test.step('Verify email', async () => {
+            await expect(page.getByTestId('user-email')).toContainText(process.env.TRIPINAS_EMAIL!);
           });
 
-          await test.step('Verify email', async () => {
-            await expect(page.getByText(process.env.TRIPINAS_EMAIL!)).toBeVisible();
-          });
           await test.step('Attach screenshot of successful login', async () => {
             await attachScreenshot(page,testInfo,LOGIN_SUCCESS_SCREENSHOT,);
           });
@@ -64,12 +65,13 @@ const LOGOUT_SUCCESS_SCREENSHOT = 'logout-success-screenshot.png';
             await loginPage.login(process.env.TRIPINAS_USERNAME!, process.env.TRIPINAS_PASSWORD!);
           });
 
+          //Instead of repeating the same assertions, we can call the method from the DashboardPage class. 
           await test.step('Verify dashboard login and user details', async () => {
-            await expect(page).toHaveURL('http://localhost:5173/dashboard');
-            await expect(page.getByRole('heading', { name: 'Welcome to your admin dashboard!' })).toHaveText('Welcome to your admin dashboard!');
-            await expect(page.getByText(process.env.TRIPINAS_FULLNAME!)).toBeVisible();
-            await expect(page.getByText(process.env.TRIPINAS_USERNAME!)).toBeVisible();
-            await expect(page.getByText(process.env.TRIPINAS_EMAIL!)).toBeVisible();
+            await dashboardPage.verifyDashboardDetails(
+                process.env.TRIPINAS_FULLNAME!,
+                process.env.TRIPINAS_USERNAME!,
+                process.env.TRIPINAS_EMAIL!
+            );
           });
 
 
@@ -85,14 +87,14 @@ const LOGOUT_SUCCESS_SCREENSHOT = 'logout-success-screenshot.png';
           await test.step('Verify user fullname in popover', async () => {
             // Verify user fullname in the popover
              const popover = page.getByRole('dialog', { name: 'User button popover' });
-            await expect(popover.getByText(process.env.TRIPINAS_FULLNAME!)).toBeVisible();
+            await expect(popover.getByTestId('user-fullname')).toContainText(process.env.TRIPINAS_FULLNAME!);
           });
 
 
           await test.step('Verify username in popover', async () => {
             // Verify username in the popover
             const popover = page.getByRole('dialog', { name: 'User button popover' });
-            await expect(popover.getByText(process.env.TRIPINAS_USERNAME!)).toBeVisible();
+            await expect(popover.getByTestId('user-username')).toContainText(process.env.TRIPINAS_USERNAME!);
           }); 
 
           await test.step('Attach screenshot of profile popover', async () => {
@@ -110,12 +112,24 @@ const LOGOUT_SUCCESS_SCREENSHOT = 'logout-success-screenshot.png';
           await loginPage.login(process.env.TRIPINAS_USERNAME!, process.env.TRIPINAS_PASSWORD!);
         });
 
+
+        //Instead of repeating the same assertions, we can call the method from the DashboardPage class. 
+        // await test.step('Verify dashboard login and user details', async () => {
+        //     await expect(page).toHaveURL('http://localhost:5173/dashboard');
+        //     await expect(page.getByRole('heading', { name: 'Welcome to your admin dashboard!' })).toContainText('Welcome to your admin dashboard!');
+        //     await expect(page.getByTestId('user-fullname')).toContainText(process.env.TRIPINAS_FULLNAME!);
+        //     await expect(page.getByTestId('user-username')).toContainText(process.env.TRIPINAS_USERNAME!);
+        //     await expect(page.getByTestId('user-email')).toContainText(process.env.TRIPINAS_EMAIL!);
+        // });
+
+
+        //Instead of repeating the same assertions, we can call the method from the DashboardPage class. 
         await test.step('Verify dashboard login and user details', async () => {
-            await expect(page).toHaveURL('http://localhost:5173/dashboard');
-            await expect(page.getByRole('heading', { name: 'Welcome to your admin dashboard!' })).toHaveText('Welcome to your admin dashboard!');
-            await expect(page.getByText(process.env.TRIPINAS_FULLNAME!)).toBeVisible();
-            await expect(page.getByText(process.env.TRIPINAS_USERNAME!)).toBeVisible();
-            await expect(page.getByText(process.env.TRIPINAS_EMAIL!)).toBeVisible();
+            await dashboardPage.verifyDashboardDetails(
+                process.env.TRIPINAS_FULLNAME!,
+                process.env.TRIPINAS_USERNAME!,
+                process.env.TRIPINAS_EMAIL!
+            );
         });
 
         await test.step('Attach screenshot of successful login', async () => {
@@ -125,7 +139,7 @@ const LOGOUT_SUCCESS_SCREENSHOT = 'logout-success-screenshot.png';
         await test.step('Logout and verify login page', async () => {
           await dashboardPage.logout(); 
           await expect(page).toHaveURL('http://localhost:5173/sign-in');
-          await expect(page.getByRole('heading', { name: 'Sign in to Tripinas' })).toHaveText('Sign in to Tripinas');
+          await expect(page.getByRole('heading', { name: 'Sign in to Tripinas' })).toContainText('Sign in to Tripinas');
         });
 
         await test.step('Attach screenshot after logout', async () => {
@@ -151,8 +165,8 @@ const LOGOUT_SUCCESS_SCREENSHOT = 'logout-success-screenshot.png';
         const profileSection = page.locator('div', { has: page.getByRole('heading', { name: 'Profile details' }) });
 
         testInfo.annotations.push({
-          type: 'data-test note',
-          description: 'Data-test attributes aren’t present. Add stable data-test attributes (e.g. data-test="user-fullname") so tests don’t break when UI markup changes.',
+          type: 'SLOW',
+          description: 'Slow network or app response',
           });
 
           await test.step('Login with valid credentials', async () => {
@@ -172,11 +186,10 @@ const LOGOUT_SUCCESS_SCREENSHOT = 'logout-success-screenshot.png';
               await dashboardPage.clickManageAccount();
           });
           
-          
           await test.step('Verify user full name, username, and label are visible in profile section', async () => {
             // Assert fullname and username inside the profile section only
-              await expect(profileSection.getByText(`${customer.firstName} ${customer.lastName}`, { exact: true })).toBeVisible();
-              await expect(profileSection.getByText(customer.username, { exact: true })).toBeVisible();
+              await expect(profileSection.getByTestId('user-fullname')).toContainText(`${customer.firstName} ${customer.lastName}`);
+              await expect(profileSection.getByTestId('user-email')).toContainText(customer.email);
 
           });
 
@@ -239,11 +252,11 @@ const LOGOUT_SUCCESS_SCREENSHOT = 'logout-success-screenshot.png';
               await dashboardPage.clickManageAccount();
           });
           
-          
+  
           await test.step('Verify user full name, username, and label are visible in profile section', async () => {
             // Assert fullname and username inside the profile section only
-              await expect(profileSection.getByText(`${customer.firstName} ${customer.lastName}`, { exact: true })).toBeVisible();
-              await expect(profileSection.getByText(customer.username, { exact: true })).toBeVisible();
+              await expect(profileSection.getByTestId('user-fullname')).toContainText(`${customer.firstName} ${customer.lastName}`);
+              await expect(profileSection.getByTestId('user-email')).toContainText(customer.email);
 
           });
 

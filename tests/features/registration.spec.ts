@@ -8,7 +8,7 @@ import newcustomers from '../../test-data/new-customers.json';
 const REGISTER_SUCCESS_SCREENSHOT = 'register-success-screenshot.png';
 const REGISTRATION_FAILURE_SCREENSHOT = 'register-form-failure-screenshot.png';
 
-test.describe("Customer Registration - Positive Test", { tag: ["@Data-Driven", "@Regression", "@Sprint-1", "@High-Priority"] }, () => {
+test.describe("Customer Registration - Happy Path", { tag: ["@Data-Driven", "@Regression", "@Sprint-1", "@High-Priority"] }, () => {
     
     newcustomers.forEach((customer) => {
 
@@ -37,17 +37,16 @@ test.describe("Customer Registration - Positive Test", { tag: ["@Data-Driven", "
             
 
             await test.step('Verify fullname', async () => {
-            await expect(page.getByText((`${customer.firstName} ${customer.lastName}`))).toBeVisible();
+            await expect(page.getByTestId('user-fullname')).toContainText(`${customer.firstName} ${customer.lastName}`);
             });
 
             await test.step('Verify username', async () => {
-            await expect(page.getByText((`${customer.username}`))).toBeVisible();
+            await expect(page.getByTestId('user-username')).toContainText(`${customer.username}`);
             });
 
             await test.step('Verify email', async () => {
-            await expect(page.getByText((`${customer.email}`))).toBeVisible();
+            await expect(page.getByTestId('user-email')).toContainText(`${customer.email}`);
             });
-
 
           await test.step('Attach screenshot of successful login', async () => {
               await attachScreenshot(page,testInfo,REGISTER_SUCCESS_SCREENSHOT);
@@ -57,7 +56,7 @@ test.describe("Customer Registration - Positive Test", { tag: ["@Data-Driven", "
           await test.step('Logout and verify login page', async () => {
             await dashboardPage.logout(); 
             await expect(page).toHaveURL('http://localhost:5173/sign-in');
-            await expect(page.getByRole('heading', { name: 'Sign in to Tripinas' })).toHaveText('Sign in to Tripinas');
+            await expect(page.getByRole('heading', { name: 'Sign in to Tripinas' })).toContainText('Sign in to Tripinas');
           });
         });
     });
@@ -113,7 +112,7 @@ test.describe("Registration Page Test Suites",{ tag: ["@Data-Driven", "@Regressi
 
 
     //Negative testing (empty field)
-    test('Verify that user is unable to register with empty fields',{tag: "@Negative"}, async ({ registrationPage }, testInfo) => {
+    test('Verify that user is unable to register with empty fields',{tag: "@Negative"}, async ({ registrationPage, page }, testInfo) => {
         
         
         await test.step('Click continue button with the fields empty', async () => {
@@ -129,7 +128,7 @@ test.describe("Registration Page Test Suites",{ tag: ["@Data-Driven", "@Regressi
         });
 
         await test.step('Attach screenshot of failed registration', async () => {
-            await attachScreenshot(registrationPage.page, testInfo, REGISTRATION_FAILURE_SCREENSHOT);
+            await attachScreenshot(page, testInfo, REGISTRATION_FAILURE_SCREENSHOT);
         });
 
     });

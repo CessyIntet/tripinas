@@ -67,7 +67,12 @@ test.describe("Registration UI Test Suites",{ tag: ["@Regression", "@Sprint-1", 
     });
     
     test('Visual testing for registration form',{tag: "@Happy-Path"}, async ({ page }, testInfo) => {
-    
+        
+        // For checking first if the page is loaded
+        await test.step('Check if the registration page has been loaded', async () => {
+            await expect(page).toHaveURL('http://localhost:5173/sign-up');
+        });
+
             await test.step('Verify that first name field is visible', async () => {
                 await expect(page.getByText('First name')).toBeVisible();
             });
@@ -82,8 +87,36 @@ test.describe("Registration UI Test Suites",{ tag: ["@Regression", "@Sprint-1", 
     
                 
             });
-        });     
-    
+        });
+        
+    test('test area snapshot for registration page', async ({ page }) => {
+        // For checking first if the page is loaded
+        await test.step('Check if the registration page has been loaded', async () => {
+            await expect(page).toHaveURL('http://localhost:5173/sign-up');
+        });
+
+        await test.step('Check area snapshot', async () => {
+            await expect(page.locator('#root')).toMatchAriaSnapshot(`
+                - heading "Create your account" [level=1]
+                - paragraph: Welcome! Please fill in the details to get started.
+                - text: First name Optional
+                - textbox "First name"
+                - text: Last name Optional
+                - textbox "Last name"
+                - text: Username
+                - textbox "Username"
+                - text: Email address
+                - textbox "Email address"
+                - text: Password
+                - textbox "Password"
+                - button "Show password":
+                - img
+                - button "Continue":
+                - img
+                `);
+
+            });
+        }); 
 
 
 });

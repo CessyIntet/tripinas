@@ -43,4 +43,23 @@ test.describe("LoginPage UI Test Suites",{ tag: ["@Regression", "@Sprint-1", "@H
     });
 
 
+    
+    test('test aria snapshot for login page', async ({ page }) => {
+        await expect(page.locator('#root')).toMatchAriaSnapshot(`
+            - heading "Sign in to Tripinas" [level=1]
+            - paragraph: Welcome back! Please sign in to continue
+            - text: Email address or username
+            - textbox "Email address or username"
+            - text: Password
+            - textbox "Password"
+            - button "Show password":
+            - img
+            - button "Continue":
+            - img
+            `);
+    });
+
+
+
 });
+

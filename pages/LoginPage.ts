@@ -120,9 +120,6 @@ export class LoginPage {
     }
 
 
-
-    
-
     async LoginValidUser(identifier: string, passwordInput: string): Promise<void> {
         await this.page.goto('http://localhost:5173/sign-in');
         await this.page.waitForLoadState('networkidle');

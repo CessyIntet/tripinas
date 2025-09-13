@@ -67,6 +67,12 @@ export class DashboardPage {
     await this.Updateusername.click();
   }
 
+  async verifyDashboardDetails(fullName: string, username: string, email: string): Promise<void> {
+    await expect(this.page.getByTestId('user-fullname')).toContainText(fullName);
+    await expect(this.page.getByTestId('user-username')).toContainText(username);
+    await expect(this.page.getByTestId('user-email')).toContainText(email);
+  }
+
 }
 
 

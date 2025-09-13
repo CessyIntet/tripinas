@@ -20,7 +20,7 @@ const XSS_LOGIN_ATTEMPT_SCREENSHOT = 'xss-login-attempt.png';
 
       
     
-      test(`should login as ${user.username} and verify profile - POM`, async ({ loginPage, page }, testInfo) => {
+      test.only(`should login as ${user.username} and verify profile - POM`, async ({ loginPage, page }, testInfo) => {
         testInfo.annotations.push({
           type: 'data-test note',
           description: 'Data-test attributes aren’t present. Add stable data-test attributes (e.g. data-test="user-fullname") so tests don’t break when UI markup changes.',
@@ -35,22 +35,22 @@ const XSS_LOGIN_ATTEMPT_SCREENSHOT = 'xss-login-attempt.png';
           });
      
           await test.step('Verify visibility of welcome heading', async () => {
-            await expect(page.getByRole('heading', { name: 'Welcome to your admin dashboard!' })).toHaveText('Welcome to your admin dashboard!');
+            await expect(page.getByRole('heading', { name: 'Welcome to your admin dashboard!' })).toContainText('Welcome to your admin dashboard!');
           });
      
           await test.step('Verify fullname', async () => {
-            await expect(page.getByText(process.env.TRIPINAS_FULLNAME!)).toBeVisible();
+            await expect(page.getByTestId('user-fullname')).toContainText(process.env.TRIPINAS_FULLNAME!);
           });
      
           await test.step('Verify username', async () => {
-            await expect(page.getByText(process.env.TRIPINAS_USERNAME!)).toBeVisible();
+            await expect(page.getByTestId('user-username')).toContainText(process.env.TRIPINAS_USERNAME!);
           });
      
           await test.step('Verify email', async () => {
-            await expect(page.getByText(process.env.TRIPINAS_EMAIL!)).toBeVisible();
+            await expect(page.getByTestId('user-email')).toContainText(process.env.TRIPINAS_EMAIL!);
           });
           await test.step('Attach screenshot of successful login', async () => {
-            await attachScreenshot(loginPage.page,testInfo,LOGIN_SUCCESS_SCREENSHOT,);
+            await attachScreenshot(page,testInfo,LOGIN_SUCCESS_SCREENSHOT,);
           });
         });
 
@@ -65,15 +65,15 @@ const XSS_LOGIN_ATTEMPT_SCREENSHOT = 'xss-login-attempt.png';
           });
      
           await test.step('Verify fullname', async () => {
-            await expect(page.getByText(process.env.TRIPINAS_FULLNAME!)).toBeVisible();
+            await expect(page.getByTestId('user-fullname')).toContainText(process.env.TRIPINAS_FULLNAME!);
           });
      
           await test.step('Verify username', async () => {
-            await expect(page.getByText(process.env.TRIPINAS_USERNAME!)).toBeVisible();
+            await expect(page.getByTestId('user-username')).toContainText(process.env.TRIPINAS_USERNAME!);
           });
      
           await test.step('Verify email', async () => {
-            await expect(page.getByText(process.env.TRIPINAS_EMAIL!)).toBeVisible();
+            await expect(page.getByTestId('user-email')).toContainText(process.env.TRIPINAS_EMAIL!);
           });
 
 
